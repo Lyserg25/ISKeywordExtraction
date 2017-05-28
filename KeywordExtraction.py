@@ -54,7 +54,7 @@ class KeywordExtraction:
         :param tags: the tags of the words that should be filtered
         :return: list of filtered words
         """
-        return [word[0] for word in tagged_text if word[1] in tags]
+        return [word[0] for word in tagged_text if (len(word) > 1 and word[1] in tags)]
 
 
     def build_graph_keywords(self, nodes):
