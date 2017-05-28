@@ -9,15 +9,15 @@ from math import log
 class KeywordExtraction:
 
     def __init__(self):
-        self.text = 'Beim Eintreffen der Feuerwehr befand sich eine Wohnung in der vierten Etage eines fünfgeschossigen Wohnhauses im Vollbrand. Vom Balkon der Brandwohnung wurde ein Mensch über eine Drehleiter in Sicherheit gebracht, rettungsdienstlich versorgt und in ein Krankenhaus transportiert. Die Brandbekämpfung erfolgte in vier Einsatzabschnitten mit zwei C-Rohren unter Einsatz von 24 Pressluftatmern. Ein Wasserschaden im dritten Obergeschoss konnte durch den Einsatz einer Wasserwehr teilweise eingedämmt werden. Die Einsatzstelle war um 23.33 Uhr übersichtlich und um 00.43 Uhr unter Kontrolle. Zur Sicherstellung des Brandschutzes wurden zwei Freiwillige Feuerwehren in Dienst gerufen, eine weitere Freiwillige Feuerwehr verlängerte ihren Einsatzdienst.'
+        #self.text = 'Beim Eintreffen der Feuerwehr befand sich eine Wohnung in der vierten Etage eines fünfgeschossigen Wohnhauses im Vollbrand. Vom Balkon der Brandwohnung wurde ein Mensch über eine Drehleiter in Sicherheit gebracht, rettungsdienstlich versorgt und in ein Krankenhaus transportiert. Die Brandbekämpfung erfolgte in vier Einsatzabschnitten mit zwei C-Rohren unter Einsatz von 24 Pressluftatmern. Ein Wasserschaden im dritten Obergeschoss konnte durch den Einsatz einer Wasserwehr teilweise eingedämmt werden. Die Einsatzstelle war um 23.33 Uhr übersichtlich und um 00.43 Uhr unter Kontrolle. Zur Sicherstellung des Brandschutzes wurden zwei Freiwillige Feuerwehren in Dienst gerufen, eine weitere Freiwillige Feuerwehr verlängerte ihren Einsatzdienst.'
         #self.text = 'Um 21:23 Uhr wurde die Berliner Feuerwehr zu einem Verkehrsunfall in Altglienicke alarmiert. Ein Pkw fuhr gegen eine Straßenlaterne und prallte gegen einen massiven Gartenzaun. Eine Personen wurde dabei im Pkw eingeschlossen. Nach notärztlicher Versorgung und zur besonders schonenden Rettung wurde eine Seitenöffnung geschaffen und das Dach abgenommen. Zum Einsatz kamen hydraulische Rettungsgeräte vom LHF und dem Rüstwagen vom Technischen Dienst. Die verletzte Person wurde dann unter Notarztbegleitung in ein Krankenhaus gebracht. Mit Trennarbeiten unterstützte die Feuerwehr den Energieversorger beim Freischalten und Beseitigen der umgestürzten Straßenlaterne.'
         self.d = 0.85 #damping factor
         self.threshold = 0.0001
-        keywords = self.extract_keywords(self.text)
-        print('Keywords: ')
-        print('\n'.join(keyword for keyword in keywords))
-        summary = self.extract_sentences(self.text)
-        print('\nSummary: \n' + summary)
+        #keywords = self.extract_keywords(self.text)
+        #print('Keywords: ')
+        #print('\n'.join(keyword for keyword in keywords))
+        #summary = self.extract_sentences(self.text)
+        #print('\nSummary: \n' + summary)
 
 
     def extract_keywords(self, text):
@@ -34,7 +34,7 @@ class KeywordExtraction:
         #pagerank = networkx.pagerank(graph, alpha=self.d, tol=self.threshold, weight='weight')
         pagerank_sorted = sorted(pagerank, key=pagerank.get, reverse=True)
         keywords = self.reconstruct_keywords(tagged_text, pagerank_sorted)
-        return keywords
+        return ', '.join(keyword for keyword in keywords)
 
 
     def tag_text(self, text):
@@ -178,7 +178,7 @@ class KeywordExtraction:
         pagerank = networkx.pagerank(graph, alpha=self.d, tol=self.threshold, weight='weight')
         pagerank_sorted = sorted(pagerank, key=pagerank.get, reverse=True)
         pagerank_sorted = pagerank_sorted[0:len(pagerank_sorted)//3]
-        summary = '\n'.join(sentence for sentence in sentences if sentence in pagerank_sorted)
+        summary = ' '.join(sentence for sentence in sentences if sentence in pagerank_sorted)
         return summary
 
 
