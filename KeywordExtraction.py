@@ -57,15 +57,15 @@ class KeywordExtraction:
         return [item.split('\t') for item in treetagger.tag_text(text)]
 
 
-    def filter_words(self, tagged_text, tags=['NN', 'NE', 'ADJA',]):
+    def filter_words(self, tagged_text, tags=['NN', 'ADJA',]):
         """Filters words with certain tags from a list of tagged words.
         
         :param tagged_text: list of tagged words
         :param tags: the tags of the words that should be filtered
         :return: list of filtered words
         """
-        unwanted = list('–-')
-        return [word[2] for word in tagged_text if (len(word) > 1 and word[1] in tags and word[2] not in unwanted)]
+        unwanted = ['–', '-', '+', '++', '+++']
+        return [word[2] for word in tagged_text if (len(word) > 1 and len(word[0]) > 1 and word[1] in tags and word[2] not in unwanted)]
 
 
     def build_graph_keywords(self, nodes):
@@ -135,12 +135,12 @@ class KeywordExtraction:
         for i in range(0, len(text) - 1):
             word1 = text[i]
             word2 = text[i + 1]
-            if word1[0] in candidates:
-                if word2[0] in candidates:
+            if word1[0] in candidates or len(word1) >= 3 and word1[2] in candidates:
+                if word2[0] in candidates or len(word2) >= 3 and word2[2] in candidates:
                     keywords.add(word1[0] + ' ' + word2[0])
                     added_words.add(word1[0])
                     added_words.add(word2[0])
-                elif word1[0] not in added_words:
+                elif word1[0] not in added_words and len(word1) >= 3:
                     keywords.add(word1[2])
                     added_words.add(word1[2])
             elif i == len(text) - 2 and word2[0] in candidates and word2[0] not in added_words:
